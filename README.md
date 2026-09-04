@@ -144,15 +144,45 @@ So whether the action-ignoring problem bites depends on how much independent
 variation the data-generating policy leaves. In a game whose equilibrium is in
 mixed strategies, that variation is structurally preserved.
 
+### Is the redundancy an equilibrium artifact?
+The results above discard the first few thousand steps as burn-in, so they
+describe the converged path. Measuring the same run from step 0 with no
+burn-in, in successive time windows (3 seeds):
+
+| window | corr(x, ĥ) | sd(x) |
+|---|---|---|
+| 0–2500 | −0.944 ± 0.003 | 10.58 |
+| 2500–5000 | −0.914 ± 0.008 | 4.91 |
+| 7500–10000 | −0.922 ± 0.005 | 5.04 |
+| 12500–15000 | −0.931 ± 0.009 | 5.51 |
+| 17500–20000 | −0.938 ± 0.003 | 6.21 |
+| 22500–25000 | −0.936 ± 0.004 | 5.95 |
+
+The correlation is flat across the whole run — if anything slightly stronger
+early, when the price is still moving (sd twice its converged value). So the
+redundancy is **not** an artifact of convergence.
+
+The reason is structural: a belief-greedy producer sits at an interior optimum
+of its *current* belief at every step, and the Lemma characterises interior
+optima. It therefore binds at every step, not only at the fixed point. The
+transient is not off-equilibrium in the relevant sense — it is a sequence of
+equilibria against changing beliefs.
+
 ### Scope
 All results are measured along the equilibrium path under belief-greedy
 pricing. They support the claim that price and hazard are close to redundant
 *at this equilibrium* — not that the 2-D sufficient statistic reduces to 1-D
 in general or off-equilibrium.
 
+Results hold within the region a belief-greedy producer visits, transient
+included. Whether the redundancy survives at prices such a producer would never
+choose is a separate question, requiring a producer that explores off its own
+best response.
+
 ### Files
 - `world_model_dim.py` — L × d sweep for latent dimensionality
 - `lemma_producer.py` — measured vs Lemma-derived hazard, pricing rule held fixed
 - `action_ablation.py` — action-conditioning ablation (present / zeroed / shuffled)
+- `transient_vs_equilibrium.py` — windowed correlation from step 0, no burn-in
 
 ---
